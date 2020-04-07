@@ -46,16 +46,21 @@ class App extends Component {
     super(props);
     this.state = {
       selectedCurve: "ease out cubic",
-      initialHUE: 180,
+      minHUE: 100,
+      maxHUE: 200,
     };
     this.handleCurveChange = this.handleCurveChange.bind(this);
-    this.handleImageInitialHUEChange = this.handleImageInitialHUEChange.bind(
-      this
-    );
-    this.HUESliderValueText = this.HUESliderValueText.bind(this);
+    this.handleMinHUEChange = this.handleMinHUEChange.bind(this);
+    this.handleMaxHUEChange = this.handleMaxHUEChange.bind(this);
+    this.HUEMinSliderValueText = this.HUEMinSliderValueText.bind(this);
+    this.HUEMaxSliderValueText = this.HUEMaxSliderValueText.bind(this);
   }
 
-  HUESliderValueText = (value) => {
+  HUEMinSliderValueText = (value) => {
+    return `${value}`;
+  };
+
+  HUEMaxSliderValueText = (value) => {
     return `${value}`;
   };
 
@@ -64,8 +69,12 @@ class App extends Component {
     console.log(this.state.selectedCurve);
   };
 
-  handleImageInitialHUEChange = (event, newValue) => {
-    this.setState({ initialHUE: `${newValue}` });
+  handleMinHUEChange = (event, newValue) => {
+    this.setState({ minHUE: `${newValue}` });
+  };
+
+  handleMaxHUEChange = (event, newValue) => {
+    this.setState({ maxHUE: `${newValue}` });
   };
   render() {
     const { classes } = this.props;
@@ -88,20 +97,32 @@ class App extends Component {
         >
           <div className={classes.toolbar} />
           <Typography>Hello Drawer Menu</Typography>
+          <Typography>Min HUE</Typography>
+          <Slider
+            defaultValue={100}
+            getAriaValueText={this.HUEMinSliderValueText}
+            onChange={this.handleMinHUEChange}
+            aria-labelledby="discrete-slider"
+            valueLabelDisplay="auto"
+            step={1}
+            min={0}
+            max={360}
+          />
+          <Typography>Max HUE</Typography>
+          <Slider
+            defaultValue={200}
+            getAriaValueText={this.HUEMaxSliderValueText}
+            onChange={this.handleMaxHUEChange}
+            aria-labelledby="discrete-slider"
+            valueLabelDisplay="auto"
+            step={1}
+            min={0}
+            max={360}
+          />
 
           <FormControl variant="outlined" className={classes.formControl}>
-            <Slider
-              defaultValue={200}
-              getAriaValueText={this.HUESliderValueText}
-              onChange={this.handleImageInitialHUEChange}
-              aria-labelledby="discrete-slider"
-              valueLabelDisplay="auto"
-              step={10}
-              min={0}
-              max={360}
-            />
             <InputLabel
-              id="select-font-family"
+              id="select-curve-type"
               style={{ marginBottom: "100px" }}
             >
               Curve type
@@ -140,7 +161,8 @@ class App extends Component {
         </Drawer>
         <PlottedCurvesSection
           selectedCurve={this.state.selectedCurve}
-          initialHUEValue={this.state.initialHUE}
+          HUEMax={this.state.maxHUE}
+          HUEMin={this.state.minHUE}
         ></PlottedCurvesSection>
       </div>
     );

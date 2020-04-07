@@ -2,7 +2,8 @@ import React from "react";
 import { makeStyles, easing } from "@material-ui/core/styles";
 import { motion } from "framer-motion";
 
-const drawerWidth = 240;
+const nodeWidth = 580;
+const dotSteps = 10;
 const spring = {
   type: "spring",
   damping: 10,
@@ -17,7 +18,7 @@ const style = makeStyles((theme) => ({
   },
 
   content: {
-    minWidth: "720px",
+    minWidth: `${nodeWidth}px`,
     minHeight: "720px",
     left: "240px",
     position: "absolute",
@@ -33,6 +34,8 @@ const style = makeStyles((theme) => ({
     // backgroundColor: "green",
     position: "absolute",
     listStyleType: "none",
+    transition: "background-color 1s ease-in-out .2s",
+    transitionDelay: ".7s",
   },
 
   // necessary for content to be below app bar
@@ -83,16 +86,21 @@ export default function PlottedCurvesSection(props) {
       var curvedOutColorLightness = Math.floor(
         --value * (value * value) + 1 * 40
       );
-      console.log(curvedOutColorLightness);
+      //   console.log(curvedOutColorLightness);
       return curvedOutColorLightness;
     } else {
-      var curvedInColorLightness = Math.floor(value * value * value * 40);
-      console.log(curvedInColorLightness);
+      var curvedInColorLightness = Math.floor(value * value * value * 100);
+      //   console.log(curvedInColorLightness);
       return curvedInColorLightness;
     }
   };
 
-  let pointsY = Array.from(range(0, 1, 0.1));
+  const dividedDotSteps = 1 / dotSteps;
+
+  //    100 - 200
+  let HUERange = Array.from(range(100, 200, 200 - 100 / dotSteps));
+
+  let pointsY = Array.from(range(0, 1, dividedDotSteps));
 
   const pointsX = pointsY.reverse();
 
@@ -104,11 +112,11 @@ export default function PlottedCurvesSection(props) {
           className={classes.dot}
           layoutTransition={spring}
           style={{
-            left: value * 100 * 2,
+            left: value * nodeWidth,
             // backgroundColor: `rgb(${easingCurve(value)}, 0, 0)`,
             // backgroundColor: `rgb(${colorCurveRGB(value)})`,
-            backgroundColor: `hsl(${props.initialHUEValue}, ${
-              value * 50
+            backgroundColor: `hsl(${value * (props.HUEMax - props.HUEMin)}, ${
+              value * 100
             }%, ${colorCurveLightness(value)}%)`,
             // backgroundColor: "hsl(180, 50, 20)",
 
