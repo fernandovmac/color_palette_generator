@@ -1,7 +1,13 @@
 import React from "react";
-import { makeStyles, rgbToHex } from "@material-ui/core/styles";
+import { makeStyles, easing } from "@material-ui/core/styles";
+import { motion } from "framer-motion";
 
 const drawerWidth = 240;
+const spring = {
+  type: "spring",
+  damping: 10,
+  stiffness: 400,
+};
 
 const style = makeStyles((theme) => ({
   root: {
@@ -16,16 +22,17 @@ const style = makeStyles((theme) => ({
     left: "240px",
     position: "absolute",
     marginTop: "300px",
-    backgroundColor: "black",
+    // backgroundColor: "black",
   },
 
   dot: {
-    minWidth: "16px",
+    minWidth: "18px",
     minHeight: "18px",
-    borderRadius: "8px",
+    borderRadius: "10px",
     // top: "300px",
     // backgroundColor: "green",
     position: "absolute",
+    listStyleType: "none",
   },
 
   // necessary for content to be below app bar
@@ -47,30 +54,67 @@ export default function PlottedCurvesSection(props) {
   //(--value)*value*value+1 ease out cubic
   //value * value * value ease-in cubic
 
+  const easingCurve = (value) => {
+    if (props.selectedCurve === "ease out cubic") {
+      var curvedResultOut = (--value * value * value + 1) * -1 * 100;
+      return curvedResultOut;
+    } else {
+      var curvedResultIn = value * value * value * -1 * 100;
+      return curvedResultIn;
+    }
+  };
+
+  const colorCurveRGB = (value) => {
+    if (props.selectedCurve === "ease out cubic") {
+      var curvedOutColorArray = new Array(3)
+        .fill(Math.floor((--value * value * value + 1) * 100))
+        .join(" , ");
+      return curvedOutColorArray;
+    } else {
+      var curvedInColorArray = new Array(3)
+        .fill(Math.floor(value * value * value * 100))
+        .join(" , ");
+      return curvedInColorArray;
+    }
+  };
+
+  const colorCurveLightness = (value) => {
+    if (props.selectedCurve === "ease out cubic") {
+      var curvedOutColorLightness = Math.floor(
+        --value * (value * value) + 1 * 40
+      );
+      console.log(curvedOutColorLightness);
+      return curvedOutColorLightness;
+    } else {
+      var curvedInColorLightness = Math.floor(value * value * value * 40);
+      console.log(curvedInColorLightness);
+      return curvedInColorLightness;
+    }
+  };
+
   let pointsY = Array.from(range(0, 1, 0.1));
 
-  console.log(pointsY);
   const pointsX = pointsY.reverse();
 
   return (
     <div className={classes.content}>
       {pointsX.map((value, index) => (
-        <div
+        <motion.li
           key={value}
           className={classes.dot}
+          layoutTransition={spring}
           style={{
             left: value * 100 * 2,
-            top: (--value * value * value + 1) * -1 * 100,
-            // backgroundColor: `rgb(
-            //     ${(--value * value * value + 1) * -1 * 100},
-            //     0,
-            //   ${value * 100})`,
+            // backgroundColor: `rgb(${easingCurve(value)}, 0, 0)`,
+            // backgroundColor: `rgb(${colorCurveRGB(value)})`,
+            backgroundColor: `hsl(${props.initialHUEValue}, ${
+              value * 50
+            }%, ${colorCurveLightness(value)}%)`,
+            // backgroundColor: "hsl(180, 50, 20)",
 
-            backgroundColor: `rgb(0 , ${new Array(2)
-              .fill((--value * value * value + 1) * -1 * 100)
-              .join(" , ")}`,
+            top: easingCurve(value),
           }}
-        ></div>
+        ></motion.li>
       ))}
     </div>
   );

@@ -8,6 +8,11 @@ import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 import PlottedCurvesSection from "./PlottedCruves.js";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import Slider from "@material-ui/core/Slider";
 
 const drawerWidth = 240;
 
@@ -39,8 +44,29 @@ const style = (theme) => ({
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      selectedCurve: "ease out cubic",
+      initialHUE: 180,
+    };
+    this.handleCurveChange = this.handleCurveChange.bind(this);
+    this.handleImageInitialHUEChange = this.handleImageInitialHUEChange.bind(
+      this
+    );
+    this.HUESliderValueText = this.HUESliderValueText.bind(this);
   }
+
+  HUESliderValueText = (value) => {
+    return `${value}`;
+  };
+
+  handleCurveChange = (event) => {
+    this.setState({ selectedCurve: event.target.value });
+    console.log(this.state.selectedCurve);
+  };
+
+  handleImageInitialHUEChange = (event, newValue) => {
+    this.setState({ initialHUE: `${newValue}` });
+  };
   render() {
     const { classes } = this.props;
     return (
@@ -62,8 +88,60 @@ class App extends Component {
         >
           <div className={classes.toolbar} />
           <Typography>Hello Drawer Menu</Typography>
+
+          <FormControl variant="outlined" className={classes.formControl}>
+            <Slider
+              defaultValue={200}
+              getAriaValueText={this.HUESliderValueText}
+              onChange={this.handleImageInitialHUEChange}
+              aria-labelledby="discrete-slider"
+              valueLabelDisplay="auto"
+              step={10}
+              min={0}
+              max={360}
+            />
+            <InputLabel
+              id="select-font-family"
+              style={{ marginBottom: "100px" }}
+            >
+              Curve type
+            </InputLabel>
+            <Select
+              labelId="outlined-select"
+              id="select-font-family"
+              value={this.state.selectedCurve}
+              onChange={this.handleCurveChange}
+              style={{ fontWeight: 100, fontSize: "12px", margin: "0px" }}
+            >
+              <MenuItem
+                value="ease out cubic"
+                id="ease out cubic"
+                style={{
+                  fontWeight: 100,
+                  fontSize: "12px",
+                  margin: "0px",
+                }}
+              >
+                Ease out cubic
+              </MenuItem>
+              <MenuItem
+                value="ease in cubic"
+                id="ease in cubic"
+                style={{
+                  fontWeight: 100,
+                  fontSize: "12px",
+                  margin: "0px",
+                }}
+              >
+                ease in cubic
+              </MenuItem>
+            </Select>
+          </FormControl>
         </Drawer>
-        <PlottedCurvesSection></PlottedCurvesSection>
+        <PlottedCurvesSection
+          selectedCurve={this.state.selectedCurve}
+          initialHUEValue={this.state.initialHUE}
+        ></PlottedCurvesSection>
       </div>
     );
   }
