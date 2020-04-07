@@ -70,11 +70,11 @@ class App extends Component {
   };
 
   handleMinHUEChange = (event, newValue) => {
-    this.setState({ minHUE: `${newValue}` });
+    this.setState({ minHUE: newValue });
   };
 
   handleMaxHUEChange = (event, newValue) => {
-    this.setState({ maxHUE: `${newValue}` });
+    this.setState({ maxHUE: newValue });
   };
   render() {
     const { classes } = this.props;

@@ -115,9 +115,9 @@ export default function PlottedCurvesSection(props) {
             left: value * nodeWidth,
             // backgroundColor: `rgb(${easingCurve(value)}, 0, 0)`,
             // backgroundColor: `rgb(${colorCurveRGB(value)})`,
-            backgroundColor: `hsl(${value * (props.HUEMax - props.HUEMin)}, ${
-              value * 100
-            }%, ${colorCurveLightness(value)}%)`,
+            backgroundColor: `hsl(${
+              props.HUEMin + value * (props.HUEMax - props.HUEMin)
+            }, ${value * 100}%, ${colorCurveLightness(value)}%)`,
             // backgroundColor: "hsl(180, 50, 20)",
 
             top: easingCurve(value),
