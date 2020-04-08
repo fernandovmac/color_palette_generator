@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles, easing } from "@material-ui/core/styles";
 import { motion } from "framer-motion";
+import Typography from "@material-ui/core/Typography";
 
 const nodeWidth = 580;
 const dotSteps = 10;
@@ -36,6 +37,12 @@ const style = makeStyles((theme) => ({
     listStyleType: "none",
     transition: "background-color 1s ease-in-out .2s",
     transitionDelay: ".7s",
+  },
+
+  HEXlabel: {
+    position: "absolute",
+    fontSize: "10px",
+    transition: "top .2s ease-in-out .1s",
   },
 
   // necessary for content to be below app bar
@@ -95,13 +102,42 @@ export default function PlottedCurvesSection(props) {
     }
   };
 
+  //Takes degree, percentage, percentage and returns css hex color:
+
+  function hslToHex(h, s, l) {
+    h /= 360;
+    s /= 100;
+    l /= 100;
+    let r, g, b;
+    if (s === 0) {
+      r = g = b = l; // achromatic
+    } else {
+      const hue2rgb = (p, q, t) => {
+        if (t < 0) t += 1;
+        if (t > 1) t -= 1;
+        if (t < 1 / 6) return p + (q - p) * 6 * t;
+        if (t < 1 / 2) return q;
+        if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+        return p;
+      };
+      const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      const p = 2 * l - q;
+      r = hue2rgb(p, q, h + 1 / 3);
+      g = hue2rgb(p, q, h);
+      b = hue2rgb(p, q, h - 1 / 3);
+    }
+    const toHex = (x) => {
+      const hex = Math.round(x * 255).toString(16);
+      return hex.length === 1 ? "0" + hex : hex;
+    };
+    // console.log(`#${toHex(r)}${toHex(g)}${toHex(b)}`);
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+  }
+
+  hslToHex(280, 90, 90);
+
   const dividedDotSteps = 1 / dotSteps;
-
-  //    100 - 200
-  let HUERange = Array.from(range(100, 200, 200 - 100 / dotSteps));
-
   let pointsY = Array.from(range(0, 1, dividedDotSteps));
-
   const pointsX = pointsY.reverse();
 
   return (
@@ -113,16 +149,29 @@ export default function PlottedCurvesSection(props) {
           layoutTransition={spring}
           style={{
             left: value * nodeWidth,
-            // backgroundColor: `rgb(${easingCurve(value)}, 0, 0)`,
-            // backgroundColor: `rgb(${colorCurveRGB(value)})`,
             backgroundColor: `hsl(${
               props.HUEMin + value * (props.HUEMax - props.HUEMin)
             }, ${value * 100}%, ${colorCurveLightness(value)}%)`,
-            // backgroundColor: "hsl(180, 50, 20)",
-
             top: easingCurve(value),
           }}
         ></motion.li>
+      ))}
+
+      {pointsX.map((value, index) => (
+        <Typography
+          key={value}
+          className={classes.HEXlabel}
+          style={{
+            left: value * nodeWidth,
+            top: easingCurve(value) - 25,
+          }}
+        >
+          {hslToHex(
+            props.HUEMin + value * (props.HUEMax - props.HUEMin),
+            value * 100,
+            colorCurveLightness(value)
+          )}
+        </Typography>
       ))}
     </div>
   );
