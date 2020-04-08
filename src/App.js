@@ -96,7 +96,7 @@ class App extends Component {
           }}
         >
           <div className={classes.toolbar} />
-          <Typography>Hello Drawer Menu</Typography>
+          <Typography>Menu</Typography>
           <Typography>Min HUE</Typography>
           <Slider
             defaultValue={100}
@@ -155,6 +155,122 @@ class App extends Component {
                 }}
               >
                 ease in cubic
+              </MenuItem>
+              <MenuItem
+                value="ease in-out cubic"
+                id="ease in-out cubic"
+                style={{
+                  fontWeight: 100,
+                  fontSize: "12px",
+                  margin: "0px",
+                }}
+              >
+                ease in-out cubic
+              </MenuItem>
+
+              <MenuItem
+                value="ease in quad"
+                id="ease in quad"
+                style={{
+                  fontWeight: 100,
+                  fontSize: "12px",
+                  margin: "0px",
+                }}
+              >
+                ease in quad
+              </MenuItem>
+
+              <MenuItem
+                value="ease out quad"
+                id="ease out quad"
+                style={{
+                  fontWeight: 100,
+                  fontSize: "12px",
+                  margin: "0px",
+                }}
+              >
+                ease out quad
+              </MenuItem>
+
+              <MenuItem
+                value="ease in-out quad"
+                id="ease in-out quad"
+                style={{
+                  fontWeight: 100,
+                  fontSize: "12px",
+                  margin: "0px",
+                }}
+              >
+                ease in-out quad
+              </MenuItem>
+
+              <MenuItem
+                value="ease in quart"
+                id="ease in quart"
+                style={{
+                  fontWeight: 100,
+                  fontSize: "12px",
+                  margin: "0px",
+                }}
+              >
+                ease in quart
+              </MenuItem>
+              <MenuItem
+                value="ease out quart"
+                id="ease out quart"
+                style={{
+                  fontWeight: 100,
+                  fontSize: "12px",
+                  margin: "0px",
+                }}
+              >
+                ease out quart
+              </MenuItem>
+              <MenuItem
+                value="ease in-out quart"
+                id="ease in-out quart"
+                style={{
+                  fontWeight: 100,
+                  fontSize: "12px",
+                  margin: "0px",
+                }}
+              >
+                ease in-out quart
+              </MenuItem>
+              <MenuItem
+                value="ease in quint"
+                id="ease in quint"
+                style={{
+                  fontWeight: 100,
+                  fontSize: "12px",
+                  margin: "0px",
+                }}
+              >
+                ease in quint
+              </MenuItem>
+
+              <MenuItem
+                value="ease out quint"
+                id="ease out quint"
+                style={{
+                  fontWeight: 100,
+                  fontSize: "12px",
+                  margin: "0px",
+                }}
+              >
+                ease out quint
+              </MenuItem>
+
+              <MenuItem
+                value="ease in-out quint"
+                id="ease in-out quint"
+                style={{
+                  fontWeight: 100,
+                  fontSize: "12px",
+                  margin: "0px",
+                }}
+              >
+                ease in-out quint
               </MenuItem>
             </Select>
           </FormControl>
