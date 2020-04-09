@@ -48,12 +48,14 @@ class App extends Component {
       selectedCurve: "ease out cubic",
       minHUE: 100,
       maxHUE: 200,
+      hoveredDot: null,
     };
     this.handleCurveChange = this.handleCurveChange.bind(this);
     this.handleMinHUEChange = this.handleMinHUEChange.bind(this);
     this.handleMaxHUEChange = this.handleMaxHUEChange.bind(this);
     this.HUEMinSliderValueText = this.HUEMinSliderValueText.bind(this);
     this.HUEMaxSliderValueText = this.HUEMaxSliderValueText.bind(this);
+    this.handleHoveredDot = this.handleHoveredDot.bind(this);
   }
 
   HUEMinSliderValueText = (value) => {
@@ -75,6 +77,12 @@ class App extends Component {
 
   handleMaxHUEChange = (event, newValue) => {
     this.setState({ maxHUE: newValue });
+  };
+
+  handleHoveredDot = (event) => {
+    const id = Number(event.currentTarget.id);
+    console.log(`this hover ${id}`);
+    this.setState({ hoveredDot: id });
   };
   render() {
     const { classes } = this.props;
@@ -279,6 +287,8 @@ class App extends Component {
           selectedCurve={this.state.selectedCurve}
           HUEMax={this.state.maxHUE}
           HUEMin={this.state.minHUE}
+          handleHoveredDot={this.handleHoveredDot}
+          hoveredDot={this.state.hoveredDot}
         ></PlottedCurvesSection>
       </div>
     );
