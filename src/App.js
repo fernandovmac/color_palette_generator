@@ -48,6 +48,8 @@ class App extends Component {
       selectedCurve: "ease out cubic",
       minHUE: 100,
       maxHUE: 200,
+      minL: 50,
+      maxL: 75,
       hoveredDot: null,
     };
     this.handleCurveChange = this.handleCurveChange.bind(this);
@@ -56,6 +58,11 @@ class App extends Component {
     this.HUEMinSliderValueText = this.HUEMinSliderValueText.bind(this);
     this.HUEMaxSliderValueText = this.HUEMaxSliderValueText.bind(this);
     this.handleHoveredDot = this.handleHoveredDot.bind(this);
+    this.handleHoverOutDot = this.handleHoverOutDot.bind(this);
+    this.handleMinLChange = this.handleMinLChange.bind(this);
+    this.handleMaxLChange = this.handleMaxLChange.bind(this);
+    this.LMinSliderValueText = this.LMinSliderValueText.bind(this);
+    this.LMaxSliderValueText = this.LMaxSliderValueText.bind(this);
   }
 
   HUEMinSliderValueText = (value) => {
@@ -66,11 +73,6 @@ class App extends Component {
     return `${value}`;
   };
 
-  handleCurveChange = (event) => {
-    this.setState({ selectedCurve: event.target.value });
-    console.log(this.state.selectedCurve);
-  };
-
   handleMinHUEChange = (event, newValue) => {
     this.setState({ minHUE: newValue });
   };
@@ -79,10 +81,35 @@ class App extends Component {
     this.setState({ maxHUE: newValue });
   };
 
+  LMinSliderValueText = (value) => {
+    return `${value}`;
+  };
+
+  LMaxSliderValueText = (value) => {
+    return `${value}`;
+  };
+
+  handleMinLChange = (event, newValue) => {
+    this.setState({ minL: newValue });
+  };
+
+  handleMaxLChange = (event, newValue) => {
+    this.setState({ maxL: newValue });
+  };
+
+  handleCurveChange = (event) => {
+    this.setState({ selectedCurve: event.target.value });
+    console.log(this.state.selectedCurve);
+  };
+
   handleHoveredDot = (event) => {
     const id = Number(event.currentTarget.id);
-    console.log(`this hover ${id}`);
     this.setState({ hoveredDot: id });
+  };
+
+  handleHoverOutDot = (event) => {
+    const id = Number(event.currentTarget.id);
+    this.setState({ hoveredDot: null });
   };
   render() {
     const { classes } = this.props;
@@ -282,6 +309,28 @@ class App extends Component {
               </MenuItem>
             </Select>
           </FormControl>
+          <Typography>Min Lightness</Typography>
+          <Slider
+            defaultValue={50}
+            getAriaValueText={this.LMinSliderValueText}
+            onChange={this.handleMinLChange}
+            aria-labelledby="discrete-slider"
+            valueLabelDisplay="auto"
+            step={1}
+            min={0}
+            max={100}
+          />
+          <Typography>Max Lightness</Typography>
+          <Slider
+            defaultValue={75}
+            getAriaValueText={this.LMaxSliderValueText}
+            onChange={this.handleMaxLChange}
+            aria-labelledby="discrete-slider"
+            valueLabelDisplay="auto"
+            step={1}
+            min={0}
+            max={100}
+          />
         </Drawer>
         <PlottedCurvesSection
           selectedCurve={this.state.selectedCurve}
@@ -289,6 +338,9 @@ class App extends Component {
           HUEMin={this.state.minHUE}
           handleHoveredDot={this.handleHoveredDot}
           hoveredDot={this.state.hoveredDot}
+          handleHoverOutDot={this.handleHoverOutDot}
+          minLightness={this.state.minL}
+          maxLightness={this.state.maxL}
         ></PlottedCurvesSection>
       </div>
     );

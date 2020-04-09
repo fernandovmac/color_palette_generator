@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import { easingCurves } from "./CurvesFunctions.js";
 import { hslToHex } from "./HSL2HEXConverter.js";
 import DotInfoTag from "./DotInfoTag.js";
+import { light } from "@material-ui/core/styles/createPalette";
 
 const nodeWidth = 620;
 const dotSteps = 10;
@@ -27,7 +28,7 @@ const style = makeStyles((theme) => ({
     minHeight: "720px",
     left: "240px",
     position: "absolute",
-    marginTop: "200px",
+    // marginTop: "200px",
     backgroundColor: "grey",
   },
 
@@ -35,7 +36,7 @@ const style = makeStyles((theme) => ({
     minWidth: `${dotSize}px`,
     minHeight: `${dotSize}px`,
     borderRadius: "10px",
-    margin: "0px",
+    marginTop: "200px",
     position: "absolute",
     listStyleType: "none",
     transition: "background-color 1s ease-in-out .2s",
@@ -54,6 +55,10 @@ const style = makeStyles((theme) => ({
 
 export default function PlottedCurvesSection(props) {
   const classes = style(props);
+  const maxLightness = props.maxLightness;
+  const minLightness = props.minLightness;
+
+  //   props.HUEMin + value * (props.HUEMax - props.HUEMin)
 
   function* range(start, end, step) {
     while (start < end) {
@@ -65,9 +70,11 @@ export default function PlottedCurvesSection(props) {
   const dividedDotSteps = 1 / dotSteps; //creates the measure of each step
   let pointsY = Array.from(range(0, 1, dividedDotSteps)); //generates the arrays with the points
 
+  let lightnessRange = maxLightness - minLightness;
+
   return (
     <div className={classes.content}>
-      <div style={{ marginTop: "300px", height: "50px" }}></div>
+      {/* <div style={{ marginTop: "300px", height: "50px" }}></div> */}
       <DotInfoTag
         pointsY={pointsY}
         selectedCurve={props.selectedCurve}
@@ -75,6 +82,8 @@ export default function PlottedCurvesSection(props) {
         HUEMax={props.HUEMax}
         HUEMin={props.HUEMin}
         hoveredDot={props.hoveredDot}
+        lightnessRange={lightnessRange}
+        minLightness={minLightness}
       ></DotInfoTag>
       {pointsY.map((value, index) => (
         <motion.li
@@ -83,12 +92,18 @@ export default function PlottedCurvesSection(props) {
           className={classes.dot}
           layoutTransition={spring}
           onMouseOver={props.handleHoveredDot}
+          onMouseOut={props.handleHoverOutDot}
           style={{
             left: value * nodeWidth,
-            backgroundColor: `hsl(${
+            backgroundColor: `hsl(${Math.floor(
               props.HUEMin + value * (props.HUEMax - props.HUEMin)
-            }, 90%, ${easingCurves(value, props.selectedCurve)}%)`,
-            top: easingCurves(value, props.selectedCurve) * -1 + 200,
+            )}, 100%, ${
+              minLightness +
+              easingCurves(value, props.selectedCurve, lightnessRange)
+            }%)`,
+            top:
+              easingCurves(value, props.selectedCurve, lightnessRange) * -3.3 +
+              200,
           }}
         ></motion.li>
       ))}

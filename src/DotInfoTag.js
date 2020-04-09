@@ -12,7 +12,7 @@ const style = makeStyles((theme) => ({
     width: "100%",
   },
 
-  HEXlabel: {
+  infoLabel: {
     position: "absolute",
     fontSize: "10px",
     transition: "top .2s ease-in-out .1s",
@@ -22,6 +22,7 @@ const style = makeStyles((theme) => ({
     minHeight: "5%",
     borderRadius: "2px",
     opacity: "0.5",
+    marginTop: "200px",
 
     // "&:hover": {
     //   color: "green",
@@ -49,36 +50,40 @@ export default function DotInfoTag(props) {
           transition={{ duration: 0.5 }}
           initial="rest"
           key={value}
-          className={classes.HEXlabel}
+          className={classes.infoLabel}
           style={{
             left: value * props.nodeWidth,
-            top: easingCurves(value, props.selectedCurve) * -1 - 43 + 200,
+            top:
+              easingCurves(value, props.selectedCurve, props.lightnessRange) *
+                -3.3 +
+              200 -
+              43,
             // opacity: props.hoveredDot === value ? "1" : "0",
           }}
         >
           <Typography
             style={{
-              left: value * props.nodeWidth,
-              top: easingCurves(value, props.selectedCurve) * -1 - 43 + 200,
               fontSize: "10px",
             }}
           >
             {`HEX : ${hslToHex(
               props.HUEMin + value * (props.HUEMax - props.HUEMin),
-              90,
-              easingCurves(value, props.selectedCurve)
+              100,
+              props.minLightness +
+                easingCurves(value, props.selectedCurve, props.lightnessRange)
             )}`}
           </Typography>
           <Typography
             style={{
-              left: value * props.nodeWidth,
-              top: easingCurves(value, props.selectedCurve) * -1 - 43 + 200,
               fontSize: "10px",
             }}
           >
-            {`HSL : ${
+            {`HSL : ${Math.floor(
               props.HUEMin + value * (props.HUEMax - props.HUEMin)
-            } 90 ${easingCurves(value, props.selectedCurve)}`}
+            )} 100 ${
+              props.minLightness +
+              easingCurves(value, props.selectedCurve, props.lightnessRange)
+            }`}
           </Typography>
         </motion.div>
       ))}
