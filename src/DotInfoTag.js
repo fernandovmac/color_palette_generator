@@ -21,7 +21,7 @@ const style = makeStyles((theme) => ({
     minWidth: "5%",
     minHeight: "5%",
     borderRadius: "2px",
-    opacity: "0.5",
+    opacity: "1",
     marginTop: "200px",
 
     // "&:hover": {
@@ -34,10 +34,14 @@ const style = makeStyles((theme) => ({
 }));
 
 const variants = {
-  rest: { opacity: 0, scale: 0 },
-  hover: { opacity: 1, scale: 1 },
+  rest: { scale: 0 },
+  hover: { scale: 1 },
 };
-// var hoveredDot= props.hoveredDot;
+const spring = {
+  type: "spring",
+  damping: 30,
+  stiffness: 700,
+};
 
 export default function DotInfoTag(props) {
   const classes = style(props);
@@ -47,7 +51,8 @@ export default function DotInfoTag(props) {
         <motion.div
           animate={props.hoveredDot === value ? "hover" : "rest"}
           variants={variants}
-          transition={{ duration: 0.5 }}
+          //   transition={{ duration: 0.1 }}
+          layoutTransition={spring}
           initial="rest"
           key={value}
           className={classes.infoLabel}
